@@ -44,8 +44,8 @@ async def myLoop():
         flag[0]=False 
     
     elif p[0].poll()==None:
-        
-        x[0]-=1
+        if x[0]>0: 
+            x[0]-=1
         return
     elif songq[0]>0:
         songq.pop(0)
