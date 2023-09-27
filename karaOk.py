@@ -35,7 +35,7 @@ def get_length(filename):
 async def myLoop():
     if flag[0] and songq[0]>0:
         if songq[1].find(".youtube.com/")!=-1 or songq[1].find("/youtu.be/")!=-1:
-            p[0]=subprocess.Popen("yt-dlp "+songq[1]+" -o  - | mpv -fs -pause -", shell=True)
+            p[0]=subprocess.Popen(["mpv","-fs","-pause","--ytdl-raw-options=format-sort=res:1080", songq[1]])
         else:
             p[0]=subprocess.Popen("ffmpeg -i '"+songq[1]+"' -f matroska - | mpv -fs -pause --force-window=yes -", shell=True)        
 
@@ -53,7 +53,7 @@ async def myLoop():
         songq.pop(0)
         if songq[0]>0:
             if songq[1].find(".youtube.com/")!=-1  or songq[1].find("/youtu.be/")!=-1:
-                 p[0]=subprocess.Popen("yt-dlp "+songq[1]+" -o  - | mpv -fs -pause -", shell=True)
+                 p[0]=subprocess.Popen(["mpv","-fs","-pause","--ytdl-raw-options=format-sort=res:1080", songq[1]])
 
             else:
                 p[0]=subprocess.Popen("ffmpeg -i '"+songq[1]+"' -f matroska - | mpv -fs -pause --force-window=yes -", shell=True)
