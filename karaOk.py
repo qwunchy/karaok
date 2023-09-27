@@ -184,6 +184,6 @@ async def on_message(message):
         await channel.send(txtput)
         
     
-client.run('MTE1NTcxNDU0MDkxNTM5NjYzOA.Gp6dTT.JS3Uu37sF813hrDaPhSMGgDAcLf4RWZJ_5awF8')
+client.run("Your token here")
 
 
