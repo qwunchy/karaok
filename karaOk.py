@@ -83,9 +83,14 @@ async def on_ready():
 
 @client.event
 async def on_message(message):
+
+
     channel = await client.create_dm(message.author)
     if message.author == client.user:
         return
+    
+    if(message.author.bot or str(message.channel.type) == "private"):
+        return 
 
     if message.content.lower().startswith("$addsong"):
         if str(message.author) in plays:
@@ -105,7 +110,7 @@ async def on_message(message):
             try:
                 output = str(subprocess.check_output(["yt-dlp", "--get-duration", content]).decode("UTF-8"))
                 output=int(output[:output.find(":")])*60+int(output[output.find(":")+1:-1]) 
-                print(output)
+                
                 total=0
                 for i in range(int(len(songq)/3)):
                     total+=songq[int(i)*3]+20
@@ -202,7 +207,10 @@ async def on_message(message):
         await channel.send(txtput)
     
 
+    elif str(message.author.roles).lower().find("karaok")==-1:
+        return
     
+    #admin commands 
     elif message.content.lower().startswith("$remove"):
         num = int(message.content[8])
         print(num)
@@ -212,16 +220,28 @@ async def on_message(message):
             del songq[num*3]
             del songq[num*3]
 
-    elif message.content.lower().startswith("$addl"):
-        num = int(message.content[8])
+    elif message.content.lower().startswith("$inserts"):
+        content=str(message.content)
+        content=content[9:]
+        num=int(content[0])
+        content=content[2:content.find("&list")]
         print(num)
-        if num >1:
-            num+=fsong[0]-1          
-            del songq[num*3]
-            del songq[num*3]
-            del songq[num*3]
+        print(content)
+        output = str(subprocess.check_output(["yt-dlp", "--get-duration", content]).decode("UTF-8"))
+        output=int(output[:output.find(":")])*60+int(output[output.find(":")+1:-1])
+        titles[content]=subprocess.check_output(["yt-dlp", "--get-title", "--restrict-filenames",  content]).decode("UTF-8")[:-1] 
+        total=0  
+        for i in range(int(len(songq)/3)):
+            total+=songq[int(i)*3]+20
 
-    elif message.content.lower().startswith("$adda"):
+        if num >1:
+            num+=fsong[0]-1          
+            songq.insert(num*3, total )
+            songq.insert(num*3+1, content)
+            songq.insert(num*3+2, message.author)
+           
+    """
+    elif message.content.lower().startswith("$insertf"):
         num = int(message.content[8])
         print(num)
         if num >1:
@@ -229,9 +249,11 @@ async def on_message(message):
             del songq[num*3]
             del songq[num*3]
             del songq[num*3]
+            """
 
             
     
-client.run('MTE1NjY4MjUwMTcxMzAzOTQ1MQ.G-kEU4.GktzR7x23j0NaZG4VmwXg8MDsrSpnm4VKGTnn4')
+client.run('Your Token Here')
+
 
 
