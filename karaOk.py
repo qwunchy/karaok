@@ -22,6 +22,10 @@ x = [0]
 content=""
 txtput=""
 temp = ""
+fsong = [0]
+y = [0]
+delet = -1
+num=0
 def get_length(filename):
     result = subprocess.run(["ffprobe", "-v", "error", "-show_entries",
                              "format=duration", "-of",
@@ -57,6 +61,7 @@ async def myLoop():
 
             else:
                 p[0]=subprocess.Popen("ffmpeg -i '"+songq[1]+"' -f matroska - | mpv -fs -pause --force-window=yes -", shell=True)
+            fsong[0]+=1
             x[0]=songq[0]
             channel = await client.create_dm(songq[2])
             await channel.send("Your song is up!")
@@ -177,13 +182,25 @@ async def on_message(message):
     
     elif message.content.lower().startswith("$showlist"):
         txtput=""
+        y[0]=0
         for i in range(int(len(songq)/3)):
+            y[0]+=1
+            txtput+=str(y[0]+fsong[0])+" "
             txtput+=(str(songq[i*3+2].display_name)+" - ")
             txtput+=(titles[str(songq[i*3+1])]+'\n')
-            
+ 
         await channel.send(txtput)
-        
+    elif message.content.lower().startswith("$remove"):
+        num = int(message.content[8])
+        print(num)
+        if num >0:
+            num+=fsong[0]-1          
+            del songq[num*3]
+            del songq[num*3]
+            del songq[num*3]
+
+            
     
-client.run("Your token here")
+client.run('MTE1NjY4MjUwMTcxMzAzOTQ1MQ.G-kEU4.GktzR7x23j0NaZG4VmwXg8MDsrSpnm4VKGTnn4')
 
 
