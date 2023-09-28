@@ -38,7 +38,7 @@ def get_length(filename):
 @tasks.loop(seconds = 1) # repeat after every 10 seconds
 async def myLoop():
     if flag[0] and songq[0]>0:
-        if songq[1].find(".youtube.com/")!=-1 or songq[1].find("/youtu.be/")!=-1:
+        if songq[1].find("cdn.discordapp.com")==-1:
             p[0]=subprocess.Popen(["mpv","-fs","-pause","--ytdl-raw-options=format-sort=res:1080", songq[1]])
         else:
             p[0]=subprocess.Popen("ffmpeg -i '"+songq[1]+"' -f matroska - | mpv -fs -pause --force-window=yes -", shell=True)        
@@ -133,6 +133,9 @@ async def on_message(message):
                 print(e)
                 await channel.send("There seems to be an error. Did you enter the link correctly?")
                         
+    
+
+
     elif message.content.lower().startswith("$addfile"):
         if str(message.author) in plays:
             plays[str(message.author)]=plays[str(message.author)]+1
@@ -165,11 +168,16 @@ async def on_message(message):
             if not myLoop.is_running():
                 myLoop.start()
 
+    
     elif message.content.lower().startswith("$qtime"):
         total=0
         for i in range(int(len(songq)/3)):
             total+=songq[int(i)*3]+20
         await channel.send(str(int((total+x[0]-songq[0])/60))+"m "+str(int((total+x[0]-songq[0]))%60)+"s")
+    
+
+
+
     elif message.content.lower().startswith("$nextsong"):
         total=0
         for i in range(int(len(songq)/3)):
@@ -180,6 +188,8 @@ async def on_message(message):
         total+=x[0]-songq[0]
         await channel.send(str(int(total/60))+"m "+str(total%60)+"s")
     
+    
+
     elif message.content.lower().startswith("$showlist"):
         txtput=""
         y[0]=0
@@ -190,10 +200,31 @@ async def on_message(message):
             txtput+=(titles[str(songq[i*3+1])]+'\n')
  
         await channel.send(txtput)
+    
+
+    
     elif message.content.lower().startswith("$remove"):
         num = int(message.content[8])
         print(num)
-        if num >0:
+        if num >1:
+            num+=fsong[0]-1          
+            del songq[num*3]
+            del songq[num*3]
+            del songq[num*3]
+
+    elif message.content.lower().startswith("$addl"):
+        num = int(message.content[8])
+        print(num)
+        if num >1:
+            num+=fsong[0]-1          
+            del songq[num*3]
+            del songq[num*3]
+            del songq[num*3]
+
+    elif message.content.lower().startswith("$adda"):
+        num = int(message.content[8])
+        print(num)
+        if num >1:
             num+=fsong[0]-1          
             del songq[num*3]
             del songq[num*3]
