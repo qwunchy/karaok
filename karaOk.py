@@ -214,17 +214,19 @@ async def on_message(message):
     elif message.content.lower().startswith("$remove"):
         num = int(message.content[8])
         print(num)
-        if num >1:
-            num+=fsong[0]-1          
+        if num >fsong[0]+1:
+            num-=fsong[0]+1          
             del songq[num*3]
             del songq[num*3]
             del songq[num*3]
 
     elif message.content.lower().startswith("$inserts"):
         content=str(message.content)
-        content=content[9:]
+        content=content[content.find(" ")+1:]
         num=int(content[0])
-        content=content[2:content.find("&list")]
+        content=content[content.find(" ")+1:]
+        if content.find("&list")!=-1:
+            content=content[:content.find("&list")]
         print(num)
         print(content)
         output = str(subprocess.check_output(["yt-dlp", "--get-duration", content]).decode("UTF-8"))
@@ -234,26 +236,27 @@ async def on_message(message):
         for i in range(int(len(songq)/3)):
             total+=songq[int(i)*3]+20
 
-        if num >1:
-            num+=fsong[0]-1          
+        if num >fsong[0]:
+            num-=fsong[0]+1          
             songq.insert(num*3, total )
             songq.insert(num*3+1, content)
             songq.insert(num*3+2, message.author)
            
-    """
+    
     elif message.content.lower().startswith("$insertf"):
-        num = int(message.content[8])
+        num=int(message.content[message.content.find(" "):])
         print(num)
-        if num >1:
-            num+=fsong[0]-1          
-            del songq[num*3]
-            del songq[num*3]
-            del songq[num*3]
-            """
+        if num >fsong[0]:
+            num-=fsong[0]+1
+            temp=str(message.attachments[-1])
+            titles[temp]=temp[temp.rfind("/")+1:temp.rfind("?")]
+            songq.insert(num*3, get_length(str(message.attachments[-1])))
+            songq.insert(num*3+1, str(message.attachments[-1]))
+            songq.insert(num*3+2, message.author)
 
             
     
-client.run('Your Token Here')
+client.run('MTE1NjY4MjUwMTcxMzAzOTQ1MQ.GerSZ9.phPuVn8H-0w_PgmqKIMZam7LcHxPb0siLW1yUk')
 
 
 
