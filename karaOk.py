@@ -221,7 +221,6 @@ async def on_message(message):
             del songq[num*3]
 
     elif message.content.lower().startswith("$inserts"):
-        songq.pop(-1)
         if not(str(message.author) in plays):
             plays[str(message.author)]=plays[str(message.author)]=0
         content=str(message.content)
