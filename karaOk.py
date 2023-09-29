@@ -221,6 +221,7 @@ async def on_message(message):
             del songq[num*3]
 
     elif message.content.lower().startswith("$inserts"):
+        songq.pop(-1)
         if not(str(message.author) in plays):
             plays[str(message.author)]=plays[str(message.author)]=0
         content=str(message.content)
@@ -229,18 +230,13 @@ async def on_message(message):
         content=content[content.find(" ")+1:]
         if content.find("&list")!=-1:
             content=content[:content.find("&list")]
-        print(num)
-        print(content)
         output = str(subprocess.check_output(["yt-dlp", "--get-duration", content]).decode("UTF-8"))
         output=int(output[:output.find(":")])*60+int(output[output.find(":")+1:-1])
         titles[content]=subprocess.check_output(["yt-dlp", "--get-title", "--restrict-filenames",  content]).decode("UTF-8")[:-1] 
-        total=0  
-        for i in range(int(len(songq)/3)):
-            total+=songq[int(i)*3]+20
 
         if num >fsong[0]:
             num-=fsong[0]+1          
-            songq.insert(num*3, total )
+            songq.insert(num*3,  output)
             songq.insert(num*3+1, content)
             songq.insert(num*3+2, message.author)
             if not myLoop.is_running():
@@ -263,7 +259,7 @@ async def on_message(message):
                 myLoop.start()
             
     
-client.run('')
+client.run('MTE1NjY4MjUwMTcxMzAzOTQ1MQ.GU2gqi.zSBcIOTcQa-a5JzykiagfRhHzJplbyUo6tzdEY')
 
 
 
