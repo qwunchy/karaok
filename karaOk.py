@@ -221,6 +221,8 @@ async def on_message(message):
             del songq[num*3]
 
     elif message.content.lower().startswith("$inserts"):
+        if not(str(message.author) in plays):
+            plays[str(message.author)]=plays[str(message.author)]=0
         content=str(message.content)
         content=content[content.find(" ")+1:]
         num=int(content[0])
@@ -241,11 +243,15 @@ async def on_message(message):
             songq.insert(num*3, total )
             songq.insert(num*3+1, content)
             songq.insert(num*3+2, message.author)
+            if not myLoop.is_running():
+                myLoop.start()
            
     
     elif message.content.lower().startswith("$insertf"):
         num=int(message.content[message.content.find(" "):])
-        print(num)
+        if not(str(message.author) in plays):
+            plays[str(message.author)]=plays[str(message.author)]=0
+
         if num >fsong[0]:
             num-=fsong[0]+1
             temp=str(message.attachments[-1])
@@ -253,7 +259,8 @@ async def on_message(message):
             songq.insert(num*3, get_length(str(message.attachments[-1])))
             songq.insert(num*3+1, str(message.attachments[-1]))
             songq.insert(num*3+2, message.author)
-
+            if not myLoop.is_running():
+                myLoop.start()
             
     
 client.run('')
