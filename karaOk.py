@@ -93,12 +93,14 @@ async def on_message(message):
         return 
 
     if message.content.lower().startswith("$addsong"):
-        if str(message.author) in plays:
-            plays[str(message.author)]=plays[str(message.author)]+1
+        if str(message.author) in plays.keys():
+            plays[str(message.author)]+=1
         else:
             plays[str(message.author)]=1
-        if plays[str(message.author)]>10:
+        
+        if plays[str(message.author)]>=2:
             await channel.send("You have too many songs queued")
+            plays[str(message.author)]-=1
         else:
             
 
@@ -152,8 +154,9 @@ async def on_message(message):
         for i in range(int(len(songq)/3)):
             total+=songq[int(i)*3]+20
         
-        if plays[str(message.author)]>10:
+        if plays[str(message.author)]>=2:
             await channel.send("You have too many songs queued")
+            plays[str(message.author)]-=1
         else: 
             if int(songq[0])>0 or x[0]!=0:
                 await channel.send("Your song is expected to play in: "+str(int((total+x[0]-songq[0])/60))+"m "+str(int((total+x[0]-songq[0])%60))+"s")
@@ -218,11 +221,12 @@ async def on_message(message):
             num-=fsong[0]+1          
             del songq[num*3]
             del songq[num*3]
+            plays[str(songq[num*3])]-=1
             del songq[num*3]
 
     elif message.content.lower().startswith("$inserts"):
         if not(str(message.author) in plays):
-            plays[str(message.author)]=plays[str(message.author)]=0
+            plays[str(message.author)]=0
         content=str(message.content)
         content=content[content.find(" ")+1:]
         num=int(content[0])
@@ -245,7 +249,7 @@ async def on_message(message):
     elif message.content.lower().startswith("$insertf"):
         num=int(message.content[message.content.find(" "):])
         if not(str(message.author) in plays):
-            plays[str(message.author)]=plays[str(message.author)]=0
+            plays[str(message.author)]=0
 
         if num >fsong[0]:
             num-=fsong[0]+1
@@ -258,7 +262,7 @@ async def on_message(message):
                 myLoop.start()
             
     
-client.run('')
+client.run('MTE1NjY4MjUwMTcxMzAzOTQ1MQ.G5jePW.FxJ9tBLIYbvhD6rmrPIo7Z5JZF3JZEm5V_5UTk')
 
 
 
