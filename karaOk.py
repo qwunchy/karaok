@@ -262,7 +262,7 @@ async def on_message(message):
                 myLoop.start()
             
     
-client.run('MTE1NjY4MjUwMTcxMzAzOTQ1MQ.G5jePW.FxJ9tBLIYbvhD6rmrPIo7Z5JZF3JZEm5V_5UTk')
+client.run('')
 
 
 
